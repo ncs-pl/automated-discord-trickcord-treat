@@ -11,3 +11,5 @@ Create a .env file with props:
 `DISCORD_USER_TOKEN` Your user account's token
 
 `DISCORD_CHANNEL_ID` ID of a channel
+
+`lEGIT_AT` the number of time you can got it before fail (to look legit)

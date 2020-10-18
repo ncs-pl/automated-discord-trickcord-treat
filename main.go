@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"os/signal"
+	"strconv"
 	"syscall"
 
 	"github.com/bwmarrin/discordgo"
@@ -11,13 +12,15 @@ import (
 )
 
 var (
-	legit = 0
+	legit  = 0
+	legitv int
 )
 
 func main() {
 	_ = godotenv.Load()
 	// Create a new Discord session using the provided bot token.
 	dg, err := discordgo.New(os.Getenv("DISCORD_USER_TOKEN"))
+	legitv, _ = strconv.Atoi(os.Getenv("LEGIT_AT"))
 	if err != nil {
 		fmt.Println("Error creating Discord session: ", err)
 		return
@@ -67,7 +70,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 			} else {
 				fmt.Println("LEGIT! Lost Trick Or Treat")
 				legit++
-				if legit == 2 {
+				if legit == legitv {
 					legit = 0
 				}
 			}

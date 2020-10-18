@@ -11,18 +11,15 @@ import (
 )
 
 var (
-	userToken = os.Getenv("DISCORD_USER_TOKEN")
-	channels = []string{"595224241742413844", "692712497844584448"}
+	channels []string
 	legit=0
 )
 
-func init() {
-	_ = godotenv.Load(".env")
-}
-
 func main() {
+	_ = godotenv.Load()
+	_ = append(channels, os.Getenv("DISCORD_CHANNEL_ID_ONE"), os.Getenv("DISCORD_CHANNEL_ID_TWO"))
 	// Create a new Discord session using the provided bot token.
-	dg, err := discordgo.New(userToken)
+	dg, err := discordgo.New(os.Getenv("DISCORD_USER_TOKEN"))
 	if err != nil {
 		fmt.Println("Error creating Discord session: ", err)
 		return

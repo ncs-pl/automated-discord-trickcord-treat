@@ -12,7 +12,7 @@ import (
 
 var (
 	channels []string
-	legit=0
+	legit    = 0
 )
 
 func main() {
@@ -52,6 +52,10 @@ func main() {
 
 func ready(_ *discordgo.Session, _ *discordgo.Ready) {
 	fmt.Println("Automation ready!  Press CTRL-C to exit.")
+	fmt.Println("Channels:")
+	for _, chans := range channels {
+		fmt.Println(chans)
+	}
 }
 
 func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
@@ -61,7 +65,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 				c, _ := s.Channel(m.ChannelID)
 				fmt.Println("Trick Or Treat in Channel #" + c.Name)
 				if legit == 0 {
-					_, _= s.ChannelMessageSend(m.ChannelID, "h!treat")
+					_, _ = s.ChannelMessageSend(m.ChannelID, "h!treat")
 					fmt.Println("Got Trick Or Treat")
 
 					legit++

@@ -11,13 +11,11 @@ import (
 )
 
 var (
-	channels []string
-	legit    = 0
+	legit = 0
 )
 
 func main() {
 	_ = godotenv.Load()
-	_ = append(channels, os.Getenv("DISCORD_CHANNEL_ID_ONE"), os.Getenv("DISCORD_CHANNEL_ID_TWO"))
 	// Create a new Discord session using the provided bot token.
 	dg, err := discordgo.New(os.Getenv("DISCORD_USER_TOKEN"))
 	if err != nil {
@@ -52,31 +50,28 @@ func main() {
 
 func ready(_ *discordgo.Session, _ *discordgo.Ready) {
 	fmt.Println("Automation ready!  Press CTRL-C to exit.")
-	fmt.Println("Channels:")
-	for _, chans := range channels {
-		fmt.Println(chans)
-	}
+	fmt.Println("Channel: " + os.Getenv("DISCORD_CHANNEL_ID"))
 }
 
 func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
-	for _, item := range channels {
-		if item == m.ChannelID {
-			if m.Author.ID == "755580145078632508" && m.Embeds[0].Title == "A trick-or-treater has stopped by!" {
-				c, _ := s.Channel(m.ChannelID)
-				fmt.Println("Trick Or Treat in Channel #" + c.Name)
-				if legit == 0 {
-					_, _ = s.ChannelMessageSend(m.ChannelID, "h!treat")
-					fmt.Println("Got Trick Or Treat")
 
-					legit++
-				} else {
-					fmt.Println("LEGIT! Lost Trick Or Treat")
-					legit++
-					if legit == 2 {
-						legit = 0
-					}
+	if os.Getenv("DISCORD_CHANNEL_ID") == m.ChannelID {
+		if m.Author.ID == "755580145078632508" && m.Embeds[0].Title == "A trick-or-treater has stopped by!" {
+			c, _ := s.Channel(m.ChannelID)
+			fmt.Println("Trick Or Treat in Channel #" + c.Name)
+			if legit == 0 {
+				_, _ = s.ChannelMessageSend(m.ChannelID, "h!treat")
+				fmt.Println("Got Trick Or Treat")
+
+				legit++
+			} else {
+				fmt.Println("LEGIT! Lost Trick Or Treat")
+				legit++
+				if legit == 2 {
+					legit = 0
 				}
 			}
 		}
 	}
+
 }
